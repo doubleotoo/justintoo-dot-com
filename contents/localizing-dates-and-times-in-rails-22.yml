@@ -1,0 +1,61 @@
+--- 
+html: |
+  <p>Here is the next installment of a series of guides I&#39;m writing for internationalizing a Rails 2.2
+  application. Please read the first part, <a href="/translating-activerecord">Translating ActiveRecord</a>, if
+  you haven&#39;t already. This time I&#39;m going to talk about how to localize dates and times to a specific
+  language.</p>
+  
+  <p>First a small recap in how to load locales. Add this to a new initializer:</p>
+  <pre><span class="Type">I18n</span>.load_path += <span class="Type">Dir</span>.glob(<span class="rubyStringDelimiter">"</span><span class="rubyInterpolationDelimiter">#{</span><span class="Type">RAILS_ROOT</span><span class="rubyInterpolationDelimiter">}</span><span class="String">/app/locales/**/*.yml</span><span class="rubyStringDelimiter">"</span>)</pre>
+  <p>This has been changed at a very late moment. <code>I18n.store_translations</code> and <code>I18n.load_translations</code>
+  have been removed.</p>
+  
+  <p>After that, you need to create a place to store your locales. Make the directory
+  <code>app&#47;locales&#47;nl-NL&#47;</code> and place your yaml files in there. Here is the English version of the
+  locale-file:</p>
+  <pre><span class="Identifier">en-US</span><span class="Special">:</span>
+    <span class="Identifier">date</span><span class="Special">:</span>
+      <span class="Identifier">formats</span><span class="Special">:</span>
+       <span class="Comment"> # Use the strftime parameters for formats.</span>
+       <span class="Comment"> # When no format has been given, it uses default.</span>
+       <span class="Comment"> # You can provide other formats here if you like!</span>
+        <span class="Identifier">default</span><span class="Special">:</span> <span class="String">"</span><span class="String">%Y-%m-%d</span><span class="String">"</span>
+        <span class="Identifier">short</span><span class="Special">:</span> <span class="String">"</span><span class="String">%b %d</span><span class="String">"</span>
+        <span class="Identifier">long</span><span class="Special">:</span> <span class="String">"</span><span class="String">%B %d, %Y</span><span class="String">"</span>
+  
+      <span class="Identifier">day_names</span><span class="Special">:</span> <span class="Special">[</span>Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday<span class="Special">]</span>
+      <span class="Identifier">abbr_day_names</span><span class="Special">:</span> <span class="Special">[</span>Sun, Mon, Tue, Wed, Thu, Fri, Sat<span class="Special">]</span>
+  
+     <span class="Comment"> # Don't forget the nil at the beginning; there's no such thing as a 0th month</span>
+      <span class="Identifier">month_names</span><span class="Special">:</span> <span class="Special">[</span>~, January, February, March, April, May, June, July, August, September, October, November, December<span class="Special">]</span>
+      <span class="Identifier">abbr_month_names</span><span class="Special">:</span> <span class="Special">[</span>~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec<span class="Special">]</span>
+     <span class="Comment"> # Used in date_select and datime_select.</span>
+      <span class="Identifier">order</span><span class="Special">:</span> <span class="Special">[</span> :year, :month, :day <span class="Special">]</span>
+  
+    <span class="Identifier">time</span><span class="Special">:</span>
+      <span class="Identifier">formats</span><span class="Special">:</span>
+        <span class="Identifier">default</span><span class="Special">:</span> <span class="String">"</span><span class="String">%a, %d %b %Y %H:%M:%S %z</span><span class="String">"</span>
+        <span class="Identifier">short</span><span class="Special">:</span> <span class="String">"</span><span class="String">%d %b %H:%M</span><span class="String">"</span>
+        <span class="Identifier">long</span><span class="Special">:</span> <span class="String">"</span><span class="String">%B %d, %Y %H:%M</span><span class="String">"</span>
+      <span class="Identifier">am</span><span class="Special">:</span> <span class="String">"</span><span class="String">am</span><span class="String">"</span>
+      <span class="Identifier">pm</span><span class="Special">:</span> <span class="String">"</span><span class="String">pm</span><span class="String">"</span></pre>
+  <p>All you need to do is replace the English terms with the translated versions. Remember that all
+  these keys are necessary to have. If you leave out, say month_names, it won&#39;t work at all.</p>
+  
+  <p>After this is done, translate dates and times like this:</p>
+  <pre><span class="Type">I18n</span>.localize(<span class="Type">Date</span>.today)</pre>
+  <p>If you want to use any of the other formats, specify this in the options hash:</p>
+  <pre><span class="Type">I18n</span>.localize(<span class="Type">Date</span>.today, <span class="Constant">:format</span> =&gt; <span class="Constant">:short</span>)</pre>
+  <p>One more tip: you can add as many formats as you like, but remember that formats like
+  <code>:db</code> are reserved for obvious reasons. Here is an overview of the <a href="http://www.ruby-doc.org/core/classes/Time.html#M000297">strftime syntax in
+  Ruby</a>.</p>
+  
+  <p><strong>PS.</strong> Rails 2.2 RC1 is really really close now!</p>
+
+toc: []
+
+introduction: |-
+  <p>Here is the next installment of a series of guides I&#39;m writing for internationalizing a Rails 2.2
+  application. Please read the first part, <a href="/translating-activerecord">Translating ActiveRecord</a>, if
+  you haven&#39;t already. This time I&#39;m going to talk about how to localize dates and times to a specific
+  language.</p><p>First a small recap in how to load locales. Add this to a new initializer:</p>

@@ -1,0 +1,12 @@
+--- 
+html: |
+  <p>This is the start of my blog.</p>
+  <pre>$ <span class="Statement">echo</span><span class="Constant"> </span><span class="Statement">"</span><span class="Constant">Hello, world!</span><span class="Statement">"</span></pre>
+  <p>First you get the id, than you get a nice version of the title ending with .html. This is a nice way
+  of making links, scoring high for a googlebot and is incredibly easy to read.</p>
+  
+  <p><img src="http://thecollegevoice.org/wp-content/uploads/2011/03/world-globe.jpg" style="width:100px; height:100px;"></p>
+
+toc: []
+
+introduction: <p>This is the start of my blog.</p>

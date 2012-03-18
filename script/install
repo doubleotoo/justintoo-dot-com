@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#-------------------------------------------------------------------------------
+#  Git SCM
+#-------------------------------------------------------------------------------
+NAME="Justin Too"
+EMAIL=doubleotoo@gmail.com
+GITHUB_REPO=doubleotoo/justintoo-dot-com.git
+HEROKU_PRODUCTION_REPO=justintoo.git
+HEROKU_STAGING_REPO=justintoo-staging.git
+
+# -e enable errors
+# -x enable script tracing
+set -x
+
+git config --local user.name  ${NAME}
+git config --local user.email ${EMAIL}
+
+git remote add    github       git@github.com:${GITHUB_REPO}
+git remote add    production   git@heroku.com:${HEROKU_PRODUCTION_REPO}
+git remote add    staging      git@heroku.com:${HEROKU_STAGING_REPO}
+
+# Hook: Only commit when tests are passing
+cp -f ./script/pre-commit .git/hooks/pre-commit
+
+#-------------------------------------------------------------------------------
+#  Ruby Bundle
+#-------------------------------------------------------------------------------
+
+./script/bundler
+
+# Mark script as untestable for git bisect if bundler fails
+if [ $? != 0 ]; then
+  exit 125
+fi
+

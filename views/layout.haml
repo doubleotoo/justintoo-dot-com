@@ -1,0 +1,106 @@
+!!!
+%html
+
+  %head
+    %title= @title || "Adventures with 2"
+    %meta(charset='UTF-8')
+    %meta(name='description' content=@description)
+    %link(href='/stylesheet.css' rel='stylesheet')
+    %link(rel='shortcut icon' href='/favicon.png')
+    %link(href='/feed' type='application/rss+xml' rel='alternate' title='RSS Feed')
+    /[if lt IE 9]
+      %script(src='http://html5shiv.googlecode.com/svn/trunk/html5.js')
+  %body
+
+    #container
+      %section#main
+        %header#header
+          .blog-title
+            %a(href='/' rel="home") Adventures with 2
+          = haml @intro if @intro
+
+        %section#content
+          = yield
+
+        %a#github(href="#")
+
+
+      %section#sidebar
+        %h3 About me
+        %p
+          &nbsp;&nbsp;I am a curious guy with a passion for living the intentional life with my partner, God Almighty.
+        %p(style="text-align: right;")
+          %strong Justin Too
+
+        %h3 More about me
+        %ul
+          %li
+            %a(href="http://www.facebook.com/doubleotoo" rel="me") Facebook
+          %li
+            %a(href="https://github.com/doubleotoo" rel="me" title="My open source projects on Github") Github
+          %li
+            %a(href="http://www.linkedin.com/in/justintoo" rel="me" title="My LinkedIn profile") LinkedIn
+          %li
+            %a(href="http://stackoverflow.com/users/1276237/doubleotoo" rel="me") StackOverflow
+          %li
+            %a(href="http://twitter.com/doubleotoo" rel="me" title="My Twitter account") Twitter
+
+      :javascript
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-30118834-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+
+      %footer#footer
+        %p All content on this site are &copy; Justin Too 2012-#{Date.today.year}, unless otherwise stated. All rights reserved.
+
+    :javascript
+      (function() {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
+        var x = document.getElementsByTagName('footer')[0];
+        x.parentNode.insertBefore(s, x);
+      })();
+
+      (function() {
+        var scrolling = function() {
+          var scrollPositions = [];
+          jQuery(".toc a").each(function(index, item) {
+            var el = $(item);
+            var id = document.getElementById(el.attr("href").slice(1))
+            var header = $(id);
+            scrollPositions.push({offset: header.offset()['top'], tocItem: el, header: header, id: id});
+          });
+
+          if (scrollPositions.length > 0) {
+            $(window).scroll(function() {
+              offset = $(window).scrollTop()
+              len = scrollPositions.length
+              var active = null;
+              for (var i = 0; i < len; i++) {
+                var head = scrollPositions[i];
+                if (head.offset < offset + 50) {
+                  active = i
+                }
+              }
+              for (var i = 0; i < len; i++) {
+                if (i === active) {
+                  scrollPositions[i].tocItem.addClass('active');
+                } else {
+                  scrollPositions[i].tocItem.removeClass('active');
+                }
+              }
+            });
+          }
+        }
+
+        window.onload = function() { jQuery(scrolling) };
+      })();

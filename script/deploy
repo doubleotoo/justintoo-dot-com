@@ -1,0 +1,50 @@
+#!/bin/bash
+# Will deploy to heroku, use branches like 'staging' (default) or 'production' as parameter
+# This is the name of the remote you want to push to.
+
+set -e
+
+env=$1
+if [[ "$env" == "" ]]; then
+  env="staging"
+fi
+
+./script/compile
+
+check_dirty() {
+  git status | grep "nothing to commit" > /dev/null
+  echo $?
+}
+
+if [[ `check_dirty` != "0" ]]; then
+  echo "Uncommitted changes found. Not deploying."
+  exit 1
+fi
+
+echo "Deploying to $env environment"
+
+case "$env" in
+#-------------------------------------------------------------------------------
+#  Always backup our production code by pushing it
+#  to our remote repository.
+"production")
+#-------------------------------------------------------------------------------
+    git tag -a "p$(date +%Y%m%d%H%m%S)" -F- <<EOF
+Production deployment to '$env':
+
+$(git remote show "$env")
+EOF
+
+    git push origin HEAD:master --force
+    git push production HEAD:master --force
+
+    ;;
+#-------------------------------------------------------------------------------
+"staging")
+#-------------------------------------------------------------------------------
+    git push origin HEAD:staging --force
+    git push staging HEAD:master --force
+
+    ;;
+esac
+

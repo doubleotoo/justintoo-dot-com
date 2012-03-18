@@ -1,0 +1,112 @@
+--- 
+html: |
+  <p>You all know <code>Symbol#to_proc</code>, right? It allows you to write this:</p>
+  <pre><span class="Comment"># Without Symbol#to_proc</span>
+  [<span class="Number">1</span>, <span class="Number">2</span>, <span class="Number">3</span>].map { |<span class="Identifier">it</span>| it.to_s }
+  [<span class="Number">3</span>, <span class="Number">4</span>, <span class="Number">5</span>].inject { |<span class="Identifier">memo</span>, <span class="Identifier">it</span>| memo * it }
+  
+  <span class="Comment"># With Symbol#to_proc</span>
+  [<span class="Number">1</span>, <span class="Number">2</span>, <span class="Number">3</span>].map(&amp;<span class="Constant">:to_s</span>)
+  [<span class="Number">3</span>, <span class="Number">4</span>, <span class="Number">5</span>].inject(&amp;<span class="Constant">:*</span>)</pre>
+  <p>It has been in Rails as long as I can remember, and is in Ruby 1.8.7 and 1.9.x. I love it to death
+  and I use it everywhere I can.</p>
+  
+  <p>It is actually quite simple, and you can implement it yourself:</p>
+  <pre><span class="Keyword">class</span> <span class="Type">Symbol</span>
+    <span class="PreProc">def</span> <span class="Function">to_proc</span>
+      <span class="Type">Proc</span>.new { |<span class="Identifier">obj</span>, *<span class="Identifier">args</span>| obj.send(<span class="Constant">self</span>, *args) }
+    <span class="PreProc">end</span>
+  <span class="Keyword">end</span></pre>
+  <p>It works because when you prepend an ampersand (&amp;) to any Ruby object, it calls <code>#to_proc</code> to
+  get a proc to use as block for the method.</p>
+  
+  <p>What I always regretted though was not being to pass any arguments, so I hacked and monkeypatched a
+  bit, and got:</p>
+  <pre><span class="Keyword">class</span> <span class="Type">Symbol</span>
+  
+    <span class="PreProc">def</span> <span class="Function">with</span>(*args, &amp;block)
+      <span class="Identifier">@proc_arguments</span> = { <span class="Constant">:args</span> =&gt; args, <span class="Constant">:block</span> =&gt; block }
+      <span class="Constant">self</span>
+    <span class="PreProc">end</span>
+  
+    <span class="PreProc">def</span> <span class="Function">to_proc</span>
+      <span class="Identifier">@proc_arguments</span> ||= {}
+      args = <span class="Identifier">@proc_arguments</span>[<span class="Constant">:args</span>] || []
+      block = <span class="Identifier">@proc_arguments</span>[<span class="Constant">:block</span>]
+      <span class="Identifier">@proc_arguments</span> = <span class="Constant">nil</span>
+      <span class="Type">Proc</span>.new { |<span class="Identifier">obj</span>, *<span class="Identifier">other</span>| obj.send(<span class="Constant">self</span>, *(other + args), &amp;block) }
+    <span class="PreProc">end</span>
+  
+  <span class="Keyword">end</span></pre>
+  <p>So you can now write:</p>
+  <pre>some_dates.map(&amp;<span class="Constant">:strftime</span>.with(<span class="rubyStringDelimiter">"</span><span class="String">%d-%M-%Y</span><span class="rubyStringDelimiter">"</span>))</pre>
+  <p>Not that this is any shorter than just creating the darn block in the first place. But hey, it&#39;s a
+  good exercise in metaprogramming and show of more of Ruby&#39;s awesome flexibility.</p>
+  
+  <p>After this I remembered something similar that annoyed me before. It&#39;s that Rails helper methods are
+  just a bag of methods available to, because they are mixed in your template. So if you have an array
+  of numbers that you want to format as currency, you&#39;d have to do:</p>
+  <pre><span class="PreProc">&lt;%=</span> <span class="Identifier">@prices</span>.map { |<span class="Identifier">price</span>| number_to_currency(price) }.to_sentence <span class="PreProc">%&gt;</span></pre>
+  <p>What if I could apply some <code>to_proc</code>-love to that too? All these helper methods cannot be added to
+  strings, fixnums, and the likes; that would clutter <em>way</em> to much. Rather, it might by a nice idea
+  to use procs that understands helper methods. Here is what I created:</p>
+  <pre><span class="Keyword">module</span> <span class="Type">ProcProxyHelper</span>
+  
+    <span class="PreProc">def</span> <span class="Function">it</span>(position = <span class="Number">1</span>)
+      <span class="Type">ProcProxy</span>.new(<span class="Constant">self</span>, position)
+    <span class="PreProc">end</span>
+  
+    <span class="Keyword">class</span> <span class="Type">ProcProxy</span>
+  
+      instance_methods.each { |<span class="Identifier">m</span>| undef_method(m) <span class="Conditional">unless</span> m.to_s =~ <span class="rubyRegexpDelimiter">/</span><span class="Special">^</span><span class="rubyRegexp">__</span><span class="Special">|</span><span class="rubyRegexp">respond_to</span><span class="Special">\?</span><span class="Special">|</span><span class="rubyRegexp">method_missing</span><span class="rubyRegexpDelimiter">/</span> }
+  
+      <span class="PreProc">def</span> <span class="Function">initialize</span>(object, position = <span class="Number">1</span>)
+        <span class="Identifier">@object</span>, <span class="Identifier">@position</span> = object, position
+      <span class="PreProc">end</span>
+  
+      <span class="PreProc">def</span> <span class="Function">to_proc</span>
+        <span class="Statement">raise</span> <span class="rubyStringDelimiter">"</span><span class="String">Please specify a method to be called on the object</span><span class="rubyStringDelimiter">"</span> <span class="Conditional">unless</span> <span class="Identifier">@delegation</span>
+        <span class="Type">Proc</span>.new { |*<span class="Identifier">values</span>| <span class="Identifier">@object</span>.__send__(*<span class="Identifier">@delegation</span>[<span class="Constant">:args</span>].dup.insert(<span class="Identifier">@position</span>, *values), &amp;<span class="Identifier">@delegation</span>[<span class="Constant">:block</span>]) }
+      <span class="PreProc">end</span>
+  
+      <span class="PreProc">def</span> <span class="Function">method_missing</span>(*args, &amp;block)
+        <span class="Identifier">@delegation</span> = { <span class="Constant">:args</span> =&gt; args, <span class="Constant">:block</span> =&gt; block }
+        <span class="Constant">self</span>
+      <span class="PreProc">end</span>
+  
+    <span class="Keyword">end</span>
+  
+  <span class="Keyword">end</span></pre>
+  <p>I used a clean blank class (in Ruby 1.9, you&#39;d want to inherit it from <code>BasicObject</code>), in which I
+  will provide the proper <code>proc</code>-object. I play around with the argument list a bit, handling multiple
+  arguments and blocks too. You can now use this syntax:</p>
+  <pre><span class="PreProc">&lt;%=</span> <span class="Identifier">@prices</span>.map(&amp;it.number_to_currency).to_sentence <span class="PreProc">%&gt;</span></pre>
+  <p>That is a lot sexier if you as me. And you can use it in any object, not just inside views. And lets
+  add some extra arguments and some <code>Enumerator</code>-love too:</p>
+  <pre><span class="Keyword">class</span> <span class="Type">SomeClass</span>
+    <span class="PreProc">include</span> <span class="Type">ProcProxyHelper</span>
+  
+    <span class="PreProc">def</span> <span class="Function">initialize</span>(name, list)
+      <span class="Identifier">@name</span>, <span class="Identifier">@list</span> = name, list
+    <span class="PreProc">end</span>
+  
+    <span class="PreProc">def</span> <span class="Function">apply</span>(value, index, seperator)
+      <span class="rubyStringDelimiter">"</span><span class="rubyInterpolationDelimiter">#{</span><span class="Identifier">@name</span><span class="rubyInterpolationDelimiter">}</span><span class="String">, </span><span class="rubyInterpolationDelimiter">#{</span>index<span class="rubyInterpolationDelimiter">}</span><span class="String"> </span><span class="rubyInterpolationDelimiter">#{</span>separator<span class="rubyInterpolationDelimiter">}</span><span class="String"> </span><span class="rubyInterpolationDelimiter">#{</span>value<span class="rubyInterpolationDelimiter">}</span><span class="rubyStringDelimiter">"</span>
+    <span class="PreProc">end</span>
+  
+    <span class="PreProc">def</span> <span class="Function">applied_list</span>
+      <span class="Identifier">@list</span>.map.with_index(&amp;it.apply(<span class="rubyStringDelimiter">"</span><span class="String">:</span><span class="rubyStringDelimiter">"</span>))
+    <span class="PreProc">end</span>
+  
+  <span class="Keyword">end</span></pre>
+  <p>In case you are wondering, the position you can specify is to tell where the arguments need to go.
+  Position 0 is the method name, so you shouldn&#39;t use that, but any other value is okay. An example
+  might be that you cant to wrap an array of texts into span-tags:</p>
+  <pre><span class="PreProc">&lt;%=</span> some_texts.map(&amp;it(<span class="Number">2</span>).content_tag(<span class="Constant">:span</span>, <span class="Constant">:class</span> =&gt; <span class="rubyStringDelimiter">"</span><span class="String">foo</span><span class="rubyStringDelimiter">"</span>)).to_sentence <span class="PreProc">%&gt;</span></pre>
+  <p>So there you have it. I&#39;m probably solving a problem that doesn&#39;t exist. It is however a nice
+  example of the awesome power of Ruby. I hope you&#39;ve enjoyed this little demonstration of the
+  possible uses of <code>to_proc</code>.</p>
+
+toc: []
+
+introduction: <p>You all know <code>Symbol#to_proc</code>, right? It allows you to write this:</p>

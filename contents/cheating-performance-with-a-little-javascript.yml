@@ -1,0 +1,37 @@
+--- 
+html: "<p>This little trick works with most websites with a menubar. When you have a menu that changes color\n\
+  pending on which page you are, you can cheat a bit on the perceived performance of loading pages.\n\
+  And all with just a little bit of Javascript. Intercept the links to change the state to active,\n\
+  before actually loading the page. The menu will feel much more responsive!</p>\n\n\
+  <p>Imagine you add a class to the menu item that is active, like this:</p>\n\
+  <pre><span class=\"Keyword\">&lt;</span><span class=\"Conditional\">nav</span><span class=\"Keyword\"> </span><span class=\"Type\">id</span><span class=\"Keyword\">=</span><span class=\"String\">\"menu\"</span><span class=\"Keyword\">&gt;</span>\n  <span class=\"Keyword\">&lt;</span><span class=\"Conditional\">ul</span><span class=\"Keyword\">&gt;</span>\n    <span class=\"Keyword\">&lt;</span><span class=\"Conditional\">li</span><span class=\"Keyword\">&gt;&lt;</span><span class=\"Conditional\">a</span><span class=\"Keyword\"> </span><span class=\"Type\">href</span><span class=\"Keyword\">=</span><span class=\"String\">\"foo.html\"</span><span class=\"Keyword\">&gt;</span><span class=\"Underlined\">Foo</span><span class=\"Identifier\">&lt;/</span><span class=\"Conditional\">a</span><span class=\"Identifier\">&gt;&lt;/</span><span class=\"Conditional\">li</span><span class=\"Identifier\">&gt;</span>\n    <span class=\"Keyword\">&lt;</span><span class=\"Conditional\">li</span><span class=\"Keyword\"> </span><span class=\"Type\">class</span><span class=\"Keyword\">=</span><span class=\"String\">\"active\"</span><span class=\"Keyword\">&gt;&lt;</span><span class=\"Conditional\">a</span><span class=\"Keyword\"> </span><span class=\"Type\">href</span><span class=\"Keyword\">=</span><span class=\"String\">\"bar.html\"</span><span class=\"Keyword\">&gt;</span><span class=\"Underlined\">Bar</span><span class=\"Identifier\">&lt;/</span><span class=\"Conditional\">a</span><span class=\"Identifier\">&gt;&lt;/</span><span class=\"Conditional\">li</span><span class=\"Identifier\">&gt;</span>\n    <span class=\"Keyword\">&lt;</span><span class=\"Conditional\">li</span><span class=\"Keyword\">&gt;&lt;</span><span class=\"Conditional\">a</span><span class=\"Keyword\"> </span><span class=\"Type\">href</span><span class=\"Keyword\">=</span><span class=\"String\">\"baz.html\"</span><span class=\"Keyword\">&gt;</span><span class=\"Underlined\">Baz</span><span class=\"Identifier\">&lt;/</span><span class=\"Conditional\">a</span><span class=\"Identifier\">&gt;&lt;/</span><span class=\"Conditional\">li</span><span class=\"Identifier\">&gt;</span>\n  <span class=\"Identifier\">&lt;/</span><span class=\"Conditional\">ul</span><span class=\"Identifier\">&gt;</span>\n\
+  <span class=\"Identifier\">&lt;/</span><span class=\"Conditional\">nav</span><span class=\"Identifier\">&gt;</span></pre>\n\
+  <p>Then all you would need to do is something like this with jQuery:</p>\n\
+  <pre>$(<span class=\"Function\">function</span>() <span class=\"Function\">{</span>\n  $(<span class=\"String\">'nav#menu a'</span>).click(<span class=\"Function\">function</span>()<span class=\"Function\">{</span>\n    $(<span class=\"String\">'nav#menu li'</span>).removeClass(<span class=\"String\">'active'</span>);\n    $(<span class=\"Identifier\">this</span>).blur().parents(<span class=\"String\">'li'</span>).addClass(<span class=\"String\">'active'</span>);\n  <span class=\"Function\">}</span>);\n\
+  <span class=\"Function\">}</span>);</pre>\n\
+  <p>I&#39;ve added a <code>blur()</code>-command in between, so the dotted lines disappear earlier.</p>\n\n\
+  <p>Try it out, you can really notice the difference. It works best when the menu items don&#39;t move, but\n\
+  only change appearance.</p>\n\n\
+  <h3 id=\"toc_0\">Update</h3>\n\n\
+  <p>Because I switched to Disqus, some nice comments have gone. <a href=\"http://twitter.com/sborsje\">Stefan\n\
+  Borsje</a>, of <a href=\"http://pressdoc.com\">Pressdoc</a> fame, replied with this\n\
+  concern:</p>\n\n\
+  <blockquote>\n\
+  <p>To be honest, I don\xE2\x80\x99t like it very much. It really changes a basic way the web works; you click\n\
+  on something, the page loads (and optionally shows an activity indicator) and you get to see the\n\
+  result. With this method you already get see part of the result even before the actual loading fase,\n\
+  which could easily confuse users by letting them think the page is already done but nothing has\n\
+  changed.</p>\n\
+  </blockquote>\n\n\
+  <p>I agree that you should be careful applying this technique. But the clicking of the link is done\n\
+  instantly, so the user would see the page loading immediately, thus he&#47;she wouldn&#39;t think the page\n\
+  is done. This technique works best if your pages are speedy enough, but can use just a bit more\n\
+  oomph.</p>\n"
+toc: 
+- anchor: "#toc_0"
+  title: Update
+introduction: |-
+  <p>This little trick works with most websites with a menubar. When you have a menu that changes color
+  pending on which page you are, you can cheat a bit on the perceived performance of loading pages.
+  And all with just a little bit of Javascript. Intercept the links to change the state to active,
+  before actually loading the page. The menu will feel much more responsive!</p><p>Imagine you add a class to the menu item that is active, like this:</p>
