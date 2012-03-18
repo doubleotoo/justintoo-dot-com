@@ -24,7 +24,7 @@ before do
   no_www!
   no_dates!
   no_trailing_slashes!
-  @description = "Adventures with Ruby is a blog about developing with Ruby and Ruby on Rails, written by Iain Hecker."
+  @description = "justintoo.com is a blog to write things on purpose, written by Justin Too."
 end
 
 get '/' do
@@ -40,21 +40,26 @@ end
 
 get '/articles' do
   static
-  @title = "All articles on Adventures with Ruby"
+  @title = "All articles on justintoo.com"
   @intro = :archive_intro
   haml :archive
 end
 
-get '/:article' do
-  @article = Index.find(params[:article])
+get '/articles/:article' do |article_title|
+  redirect to("/#{article_title}")
+end
+get '/:article' do |article_title|
+  # matches "GET /hello-world"
+  # params[:article] is 'hello-world'
+  @article = Index.find(article_title)
   if @article.found?
     static
-    @title       = "#{@article.title} - Adventures with Ruby"
+    @title       = "#{@article.title} - justintoo"
     @description = @article.summary
     @intro       = :article_intro
-    haml :article
+    haml :article # render views/article.haml
   else
-    pass
+    pass # punt processing to the next matching route
   end
 end
 
@@ -63,3 +68,4 @@ not_found do
   @intro = :not_found_intro
   haml :not_found
 end
+

@@ -11,8 +11,17 @@ class IndexReader
     @article  = article
   end
 
+  # Returns a new Hash of articles
+  #
+  #   {
+  #     article_id => Article,
+  #     ...
+  #   }
+  #
+  #
   def read
-    Hash[ load_file.map { |id, attributes| [ id, make_article(id, attributes) ] } ]
+    Hash[
+      load_file.map { |id, attributes| [id, make_article(id, attributes)] }]
   end
 
   private

@@ -21,3 +21,9 @@ Run:
 ``` bash
 ./script/server
 
+Archive workflow: `lib/archive.rb`:
+
+1. Read in article index: `articles/_index.yml` [lib/index_reader.rb]
+
+
+

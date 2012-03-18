@@ -2,7 +2,7 @@
 %html
 
   %head
-    %title= @title || "Adventures with 2"
+    %title= @title || "justintoo"
     %meta(charset='UTF-8')
     %meta(name='description' content=@description)
     %link(href='/stylesheet.css' rel='stylesheet')
@@ -16,7 +16,7 @@
       %section#main
         %header#header
           .blog-title
-            %a(href='/' rel="home") Adventures with 2
+            %a(href='/' rel="home") Justin Too
           = haml @intro if @intro
 
         %section#content
@@ -35,15 +35,15 @@
         %h3 More about me
         %ul
           %li
-            %a(href="http://www.facebook.com/doubleotoo" rel="me") Facebook
+            %a(href="http://www.facebook.com/doubleotoo" target="_blank" rel="me") Facebook
           %li
-            %a(href="https://github.com/doubleotoo" rel="me" title="My open source projects on Github") Github
+            %a(href="https://github.com/doubleotoo" target="_blank" rel="me" title="My open source projects on Github") Github
           %li
-            %a(href="http://www.linkedin.com/in/justintoo" rel="me" title="My LinkedIn profile") LinkedIn
+            %a(href="http://www.linkedin.com/in/justintoo" target="_blank" rel="me" title="My LinkedIn profile") LinkedIn
           %li
-            %a(href="http://stackoverflow.com/users/1276237/doubleotoo" rel="me") StackOverflow
+            %a(href="http://stackoverflow.com/users/1276237/doubleotoo" target="_blank" rel="me") StackOverflow
           %li
-            %a(href="http://twitter.com/doubleotoo" rel="me" title="My Twitter account") Twitter
+            %a(href="http://twitter.com/doubleotoo" target="_blank" rel="me" title="My Twitter account") Twitter
 
       :javascript
         var _gaq = _gaq || [];
