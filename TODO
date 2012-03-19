@@ -1,0 +1,8 @@
+* Use Disqus for technical articles (more developer features; coding; threads; etc)
+* Use Facebook for other articles
+
+* StackOverflow:
+
+        %li
+          %a(href="http://stackoverflow.com/users/1276237/doubleotoo" target="_blank" rel="me") StackOverflow
+

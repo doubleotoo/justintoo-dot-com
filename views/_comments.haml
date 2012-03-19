@@ -4,23 +4,26 @@
     %a{href: "http://twitter.com/share", class: "twitter-share-button", data: { count: "vertical", via: "doubleotoo", text: article.title, url: "#{request.scheme}://#{request.host}#{article.url}"}} Tweet
     %script(type="text/javascript" src="http://platform.twitter.com/widgets.js")
 
-  #disqus_thread
+  #facebook_comments
+  .fb-comments(data-href="http://www.justintoo.com#{article.url}" data-num-posts="10" data-width="560")
 
-  :javascript
-    var disqus_shortname  = 'justintoo';
-    var disqus_identifier = '#{article.disqus_id}';
-    var disqus_url        = 'http://justintoo.com#{article.url}';
-
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-
-  %noscript
-    Please enable JavaScript to view the
-    %a(href="http://disqus.com/?ref_noscript") comments powered by Disqus.
-
-  %a(href="http://disqus.com" class="dsq-brlink")
-    blog comments powered by
-    %span.logo-disqus Disqus
+-#  #disqus_thread
+-#
+-#  :javascript
+-#    var disqus_shortname  = 'justintoo';
+-#    var disqus_identifier = '#{article.disqus_id}';
+-#    var disqus_url        = 'http://justintoo.com#{article.url}';
+-#
+-#    (function() {
+-#        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+-#        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+-#        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+-#    })();
+-#
+-#  %noscript
+-#    Please enable JavaScript to view the
+-#    %a(href="http://disqus.com/?ref_noscript") comments powered by Disqus.
+-#
+-#  %a(href="http://disqus.com" class="dsq-brlink")
+-#    blog comments powered by
+-#    %span.logo-disqus Disqus

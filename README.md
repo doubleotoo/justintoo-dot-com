@@ -1,6 +1,6 @@
 # justintoo.com
 
-This is my blog
+This is my blog. Many thanks to [Iain Hecker](https://github.com/iain) for the template.
 
 ## Usage
 

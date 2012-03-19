@@ -11,6 +11,28 @@
     /[if lt IE 9]
       %script(src='http://html5shiv.googlecode.com/svn/trunk/html5.js')
   %body
+    #fb-root
+    :javascript
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '213243855449683', // App ID
+          channelUrl : '//www.justintoo.com/channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+
+        // Additional initialization code here
+      };
+
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
 
     #container
       %section#main
@@ -22,28 +44,32 @@
         %section#content
           = yield
 
-        %a#github(href="#")
+        %a#github(href="http://github.com/doubleotoo/justintoo-dot-com" target="_blank")
 
 
       %section#sidebar
         %h3 About me
         %p
-          &nbsp;&nbsp;I am a curious guy with a passion for living the intentional life with my partner, God Almighty.
+          I am a Computer Scientist by trade, athlete by passion, and a child of God by Grace.
         %p(style="text-align: right;")
           %strong Justin Too
 
         %h3 More about me
         %ul
           %li
-            %a(href="http://www.facebook.com/doubleotoo" target="_blank" rel="me") Facebook
-          %li
-            %a(href="https://github.com/doubleotoo" target="_blank" rel="me" title="My open source projects on Github") Github
+            %a(href="http://www.facebook.com/doubleotoo" target="_blank" rel="me" title="My Facebook profile") Facebook
           %li
             %a(href="http://www.linkedin.com/in/justintoo" target="_blank" rel="me" title="My LinkedIn profile") LinkedIn
           %li
-            %a(href="http://stackoverflow.com/users/1276237/doubleotoo" target="_blank" rel="me") StackOverflow
-          %li
             %a(href="http://twitter.com/doubleotoo" target="_blank" rel="me" title="My Twitter account") Twitter
+        %hr
+        %ul
+          %li
+            %a(href="http://github.com/doubleotoo" target="_blank" rel="me" title="My open source projects on Github") Github
+        %hr
+        %ul
+          %li
+            %a(href="http://fccchurch.com" target="_blank" rel="friend" title="My local church") Family Community Church
 
       :javascript
         var _gaq = _gaq || [];
@@ -62,12 +88,18 @@
 
     :javascript
       (function() {
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
+        var jquery_main = document.createElement('script');
+        jquery_main.type = 'text/javascript';
+        jquery_main.async = true;
+        jquery_main.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
         var x = document.getElementsByTagName('footer')[0];
-        x.parentNode.insertBefore(s, x);
+        x.parentNode.insertBefore(jquery_main, x);
+
+        var jquery_ui = document.createElement('script');
+        jquery_ui.type = 'text/javascript';
+        jquery_ui.async = true;
+        jquery_ui.src = 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js';
+        jquery_main.parentNode.insertBefore(jquery_ui, jquery_main);
       })();
 
       (function() {
@@ -78,6 +110,13 @@
             var id = document.getElementById(el.attr("href").slice(1))
             var header = $(id);
             scrollPositions.push({offset: header.offset()['top'], tocItem: el, header: header, id: id});
+
+            $(item).click(function() {
+              //$(':header[id*="toc_"]').stop(true, true); // TODO: stop previous animations
+              jQuery(".toc a").removeClass('active');
+              el.addClass('active');
+              $(header).effect("highlight", {}, 2000);
+            });
           });
 
           if (scrollPositions.length > 0) {

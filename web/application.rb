@@ -33,6 +33,13 @@ get '/' do
   haml :index
 end
 
+get '/channel.html' do
+  static
+  cache_expire=60*60*24*365
+  expires cache_expire, :public, :max_age => cache_expire
+  haml :channel
+end
+
 get '/feed' do
   static archive.last.published_at.to_s
   builder :rss

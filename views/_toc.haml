@@ -1,11 +1,12 @@
-- if @article.contents.toc?
-  %aside.toc
-    %nav
-      %ul
-        %li
-          %a{href: "##{@article.id}", title: "Intro: #{@article.title}"} Introduction
+%aside.toc
+  %nav
+    %ul
+      %li
+        %a{href: "##{@article.id}", title: "Intro: #{@article.title}"} Introduction
+      - if @article.contents.toc?
         - @article.contents.toc.each do |item|
           %li
             %a{href: item['anchor'], title: item['title']}= item['title']
-        %li
-          %a{href: '#comments', title: 'comments'} Discussion
+      %li
+        %a{href: '#comments', title: 'comments'} Discussion
+

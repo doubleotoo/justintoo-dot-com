@@ -1,1 +1,8 @@
-= article.contents.introduction
+.article_summary
+
+  %p.summary
+
+    %a{href: article.url, title: "Article: #{article.title}", rel: 'nofollow'}
+      %img(src="#{article.image}")
+    = article.contents.introduction
+

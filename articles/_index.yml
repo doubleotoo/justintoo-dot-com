@@ -1,5 +1,7 @@
 hello-world:
   title: "Hello, world!"
-  publish: 2012-03-16
+  publish: 2012-03-18
   wp: 1
-  summary: "My introduction into the world!"
+  summary: "This is the start of my blog."
+  image: "http://i1259.photobucket.com/albums/ii553/doubleotoo/world-globe.jpg"
+

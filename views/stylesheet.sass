@@ -186,9 +186,6 @@ hr
     color: $black
     text-align: justify
 
-  p + p
-    margin-top: $big_gap
-
     &.read_more
       text-align: right
       a
@@ -197,6 +194,9 @@ hr
         margin-bottom: $big-gap
         +link-colors($warm-gray, $red)
         text-decoration: none
+
+  p + p
+    margin-top: $big_gap
 
   h1, h2, h3, h4, h5, h6
     margin: $big-gap 0 $small-gap 0
@@ -231,7 +231,7 @@ hr
       color: $warm-gray
 
   article
-    min-height: 100px
+    min-height: 250px
     h1
       a
         color: $black
@@ -240,10 +240,20 @@ hr
       margin: $big-gap 0 $small-gap ($big-gap * -1) + 1
       padding: 0 0 $small-gap $big-gap
       border-bottom: $sidebar-border
+    p
+      margin-top: 25px
     p.summary a
       color: $black
       text-decoration: none
       display: block
+
+  .article_summary
+    margin-bottom: 80px
+    img
+      width:  100px
+      height: 100px
+      float:  left
+      margin-right: 20px
 
   aside
     +embossed
@@ -358,8 +368,8 @@ hr
 
 #twitter
   margin-top: -1px
-  margin-right: -110px
-  float: right
+  margin-left: -110px
+  float: left
   width: 60px
   border-top: $sidebar-border
   padding: 2 * $small-gap 13px

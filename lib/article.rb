@@ -15,6 +15,10 @@ class Article
     @attributes.fetch("title")
   end
 
+  def image
+    @attributes.fetch("image")
+  end
+
   def summary
     @attributes.fetch("summary")
   end
