@@ -8,6 +8,7 @@
     %link(href='/stylesheet.css' rel='stylesheet')
     %link(rel='shortcut icon' href='/favicon.png')
     %link(href='/feed' type='application/rss+xml' rel='alternate' title='RSS Feed')
+    %script(type="text/javascript" src="/javascript/jquery.min.js")
     /[if lt IE 9]
       %script(src='http://html5shiv.googlecode.com/svn/trunk/html5.js')
   %body
@@ -43,9 +44,6 @@
 
         %section#content
           = yield
-
-        %a#github(href="http://github.com/doubleotoo/justintoo-dot-com" target="_blank")
-
 
       %section#sidebar
         %h3 About me
@@ -123,12 +121,21 @@
         var scrolling = function() {
           $('#nav').onePageNav({
             currentClass: 'active',
+            filter: ':not(.toc-top-link)',
             changeHash: true,
             scrollSpeed: 750,
             easing: 'swing'
           });
         }
 
-        window.onload = function() { jQuery(scrolling) };
+        //var toc = function() {
+        //  var scrollBottom = $(window).scrollTop() + $(window).height();
+        //  if ($(document).height() > scrollBottom) {
+        //    $('#toc-top-li').show();
+        //  }
+        //}
+        //$('#toc-top-li').hide();
+
+        window.onload = function() { jQuery(scrolling); };
       })();
 

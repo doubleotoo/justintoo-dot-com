@@ -2,11 +2,13 @@
   %nav
     %ul(id='nav')
       %li
-        %a{href: "##{@article.id}", title: "Intro: #{@article.title}", class: "active"} Introduction
-      - if @article.contents.toc?
+        %a{href: "##{@article.id}", title: "Intro: #{@article.title}", class: "active"} #{@article.title}
+        %hr
+      - if not @article.contents.toc.nil?
         - @article.contents.toc.each do |item|
           %li
             %a{href: item['anchor'], title: item['title']}= item['title']
       %li
+        %hr
         %a{href: '#comments', title: 'comments'} Discussion
 

@@ -31,7 +31,7 @@ describe "application" do
     let(:name) { "the-name-of-the-article" }
 
     it "renders the article" do
-      contents = double("Contents", :toc? => false, :html => "")
+      contents = double("Contents", :toc => nil, :html => "")
       article = double("Article", :found? => true, :summary => false, :deprecated? => false, :old? => false, :url => "", :id => 1, :title => "", :contents => contents, :published_at => Date.today, :disqus_id => "")
       Index.should_receive(:find).with(name).and_return(article)
       get "/#{name}"
