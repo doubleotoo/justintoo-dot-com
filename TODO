@@ -1,3 +1,6 @@
+* Fix Twitter tweet button
+* Add Twitter tweet button to home page
+* Add my Twitter feed
 * Use Disqus for technical articles (more developer features; coding; threads; etc)
 * Use Facebook for other articles
 
@@ -5,4 +8,21 @@
 
         %li
           %a(href="http://stackoverflow.com/users/1276237/doubleotoo" target="_blank" rel="me") StackOverflow
+
+
+* Overflow ellipsis:	http://davidwalsh.name/css-ellipsis
+* Outline:		http://davidwalsh.name/outline-offset
+* Google extension:	http://davidwalsh.name/google-extension-effect
+
+
+
+----
+* jsfiddle		http://jsfiddle.net/
+* Font Awesome		http://fortawesome.github.com/Font-Awesome/
+
+
+
+Rails 3, Compass, SASS, and Twitter Bootstrap
+
+	http://nepalonrails.tumblr.com/post/13957284625/revisited-rails-3-1-x-with-compass-sass-and
 

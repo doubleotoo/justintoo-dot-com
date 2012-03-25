@@ -88,58 +88,47 @@
 
     :javascript
       (function() {
+        // jquery.min.js
         var jquery_main = document.createElement('script');
         jquery_main.type = 'text/javascript';
         jquery_main.async = true;
-        jquery_main.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
+        jquery_main.src = '/javascript/jquery.min.js';
         var x = document.getElementsByTagName('footer')[0];
         x.parentNode.insertBefore(jquery_main, x);
 
+        // jquery-ui.min.js
         var jquery_ui = document.createElement('script');
         jquery_ui.type = 'text/javascript';
         jquery_ui.async = true;
-        jquery_ui.src = 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js';
+        jquery_ui.src = '/javascript/jquery-ui.min.js';
         jquery_main.parentNode.insertBefore(jquery_ui, jquery_main);
+
+        // jquery.nav.min.js
+        var jquery_nav = document.createElement('script');
+        jquery_nav.type = 'text/javascript';
+        jquery_nav.async = true;
+        jquery_nav.src = '/javascript/jquery.nav.min.js';
+        jquery_main.parentNode.insertBefore(jquery_nav, jquery_main);
+
+        // jquery.scrollTo.js
+        var jquery_scrollto = document.createElement('script');
+        jquery_scrollto.type = 'text/javascript';
+        jquery_scrollto.async = true;
+        jquery_scrollto.src = '/javascript/jquery.scrollTo.js';
+        jquery_main.parentNode.insertBefore(jquery_scrollto, jquery_main);
       })();
 
+    :javascript
       (function() {
         var scrolling = function() {
-          var scrollPositions = [];
-          jQuery(".toc a").each(function(index, item) {
-            var el = $(item);
-            var id = document.getElementById(el.attr("href").slice(1))
-            var header = $(id);
-            scrollPositions.push({offset: header.offset()['top'], tocItem: el, header: header, id: id});
-
-            $(item).click(function() {
-              //$(':header[id*="toc_"]').stop(true, true); // TODO: stop previous animations
-              jQuery(".toc a").removeClass('active');
-              el.addClass('active');
-              $(header).effect("highlight", {}, 2000);
-            });
+          $('#nav').onePageNav({
+            currentClass: 'active',
+            changeHash: true,
+            scrollSpeed: 750,
+            easing: 'swing'
           });
-
-          if (scrollPositions.length > 0) {
-            $(window).scroll(function() {
-              offset = $(window).scrollTop()
-              len = scrollPositions.length
-              var active = null;
-              for (var i = 0; i < len; i++) {
-                var head = scrollPositions[i];
-                if (head.offset < offset + 50) {
-                  active = i
-                }
-              }
-              for (var i = 0; i < len; i++) {
-                if (i === active) {
-                  scrollPositions[i].tocItem.addClass('active');
-                } else {
-                  scrollPositions[i].tocItem.removeClass('active');
-                }
-              }
-            });
-          }
         }
 
         window.onload = function() { jQuery(scrolling) };
       })();
+

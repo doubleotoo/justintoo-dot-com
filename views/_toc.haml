@@ -1,8 +1,8 @@
 %aside.toc
   %nav
-    %ul
+    %ul(id='nav')
       %li
-        %a{href: "##{@article.id}", title: "Intro: #{@article.title}"} Introduction
+        %a{href: "##{@article.id}", title: "Intro: #{@article.title}", class: "active"} Introduction
       - if @article.contents.toc?
         - @article.contents.toc.each do |item|
           %li
