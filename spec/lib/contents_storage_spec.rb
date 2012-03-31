@@ -40,7 +40,7 @@ describe ContentsStorage do
 
     it "writes content to file" do
       subject.write("foo" => "bar")
-      File.open(subject.filename, 'r:utf-8').read.should == "--- \nfoo: bar\n"
+      File.open(subject.filename, 'r:utf-8').read.should == "---\nfoo: bar\n"
     end
 
   end

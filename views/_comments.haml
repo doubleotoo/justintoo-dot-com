@@ -1,10 +1,10 @@
 %section#comments
 
-  #twitter
-    %a{href: "http://twitter.com/share", class: "twitter-share-button", data: { count: "vertical", via: "doubleotoo", text: article.title, url: "#{request.scheme}://#{request.host}#{article.url}"}} Tweet
-    %script(type="text/javascript" src="http://platform.twitter.com/widgets.js")
+  #share
+    %span(class='st_fblike_hcount' st_url="#{request.scheme}://#{request.host}#{article.url}" displayText='Facebook Like')
+    %span(class='st_twitter_hcount' st_url="#{request.scheme}://#{request.host}#{article.url}" displayText='Tweet')
+    %span(class='st_email_hcount' displayText='Email')
 
-  #facebook_comments
   .fb-comments(data-href="http://www.justintoo.com#{article.url}" data-num-posts="10" data-width="560")
 
 -#  #disqus_thread
